@@ -17,7 +17,15 @@ DataFile::DataFile() {
 
 string DataFile::printFile() {
     stringstream ss;
-    // ss << PID << " " << arrivalTime << " " << cpuBurst << " " << ioBurst;
+
+    ss << PID << " " << arrivalTime << " ";
+    for (int cpuBurst_i: cpuBurst) {
+        ss << cpuBurst_i << " ";
+    }
+    for (int io_burst_i: ioBurst) {
+        ss << io_burst_i << " ";
+    }
+    ss << endl;
 
     return ss.str();
 }
