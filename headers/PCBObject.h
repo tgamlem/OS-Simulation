@@ -25,6 +25,10 @@ class PCBObject {
         int PID;
         ProcessPriority priority;
         ProcessState state;
+        int arrivalTime;
+        int departureTime;
+        int responseTime;
+        int waitTime;
         int executionTime;
         int accumulatedTime;
         DataFile dataFile;
@@ -35,6 +39,13 @@ class PCBObject {
         int getPID();
         ProcessPriority getPriority();
         ProcessState getState();
+        void setArrivalTime(int time);
+        void setDepartureTime(int time);
+        void setResponseTime(int time);
+        void setWaitTime(int time);
+        void setAccumulatedTime(int time);
+        int getArrivalTime();
+        int getDepartureTime();
         int getExecutionTime();
         int getAccumulatedTime();
         DataFile getDataFile();

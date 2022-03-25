@@ -4,6 +4,10 @@ PCBObject::PCBObject(int PID, ProcessPriority priority, ProcessState state, int 
     this->PID = PID;
     this->priority = priority;
     this->state = state;
+    arrivalTime = 0;
+    departureTime = 0;
+    responseTime = 0;
+    waitTime = 0;
     this->executionTime = executionTime;
     this->accumulatedTime = accumulatedTime;
     this->dataFile = dataFile;
@@ -19,6 +23,34 @@ ProcessPriority PCBObject::getPriority() {
 
 ProcessState PCBObject::getState() {
     return state;
+}
+
+void PCBObject::setArrivalTime(int time) {
+    arrivalTime = time;
+}
+
+void PCBObject::setDepartureTime(int time) {
+    departureTime = time;
+}
+
+void PCBObject::setResponseTime(int time) {
+    responseTime = time - arrivalTime;
+}
+
+void PCBObject::setWaitTime(int time) {
+    waitTime += time - arrivalTime;
+}
+
+void PCBObject::setAccumulatedTime(int time) {
+    accumulatedTime = time;
+}
+
+int PCBObject::getArrivalTime() {
+    return arrivalTime;
+}
+
+int PCBObject::getDepartureTime() {
+    return departureTime;
 }
 
 int PCBObject::getExecutionTime() {
