@@ -1,4 +1,5 @@
 #include "PCBObject.h"
+#include <iostream>
 
 PCBObject::PCBObject(int PID, ProcessPriority priority, ProcessState state, int executionTime, int accumulatedTime, DataFile dataFile) {
     this->PID = PID;
@@ -77,6 +78,15 @@ void PCBObject::setState(ProcessState state) {
     this->state = state;
 }
 
-void PCBObject::updateAccumulateTime(int accumulatedTime) {
-    this->accumulatedTime = accumulatedTime;
+void PCBObject::print() {
+    std::cout << "---------------------------------\n";
+    std::cout << "PCB Object:\n";
+    std::cout << "\tPID: " << PID << endl;
+    std::cout << "\tArrival Time: " << arrivalTime << endl;
+    std::cout << "\tResponse Time: " << responseTime << endl;
+    std::cout << "\tWait Time: " << waitTime << endl;
+    std::cout << "\tExecution Time: " << executionTime << endl;
+    std::cout << "\tAccumulated Time: " << accumulatedTime << endl;
+    std::cout << "\tDeparture Time: " << departureTime << endl;
+    std::cout << "---------------------------------\n\n";
 }

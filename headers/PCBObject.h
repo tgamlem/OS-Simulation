@@ -52,7 +52,7 @@ class PCBObject {
         void setDataFile(DataFile dataFile);
         void setPriority(ProcessPriority priority);
         void setState(ProcessState state);
-        void updateAccumulateTime(int accumulatedTime);
+        void print();
 };
 
 #endif
