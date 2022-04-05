@@ -22,6 +22,10 @@ void FCFS::removeReady(int curTime) {
     ready.pop();
 }
 
+PCBObject FCFS::checkTop() {
+    return ready.front();
+}
+
 int FCFS::run(int curTime) {
     PCBObject pcb = ready.front();
     ready.pop();
