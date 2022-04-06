@@ -3,16 +3,12 @@
 #include <chrono>
 #include <sstream>
 
-DataFile::DataFile() {
+DataFile::DataFile(int curTime) {
     // srandom();
     int pid = rand() % 30000 + 300;
     this->PID = pid;
-    auto start = chrono::system_clock::now();
-    time_t time = chrono::system_clock::to_time_t(start);
-    time = time + (rand() % 600);
-    stringstream ss;
-    ss << time;
-    this->arrivalTime = ss.str();
+    this->arrivalTime = curTime;
+    this->executionTime = rand() % 20 + 1;
 }
 
 string DataFile::printFile() {
@@ -34,8 +30,12 @@ int DataFile::getPID() {
     return PID;
 }
 
-string DataFile::getArrivalTime() {
+int DataFile::getArrivalTime() {
     return arrivalTime;
+}
+
+int DataFile::getExecutionTime() {
+    return executionTime;
 }
 
 vector<int> DataFile::getCPUBursts() {
@@ -50,8 +50,12 @@ void DataFile::setPID(int PID) {
     this->PID = PID;
 }
 
-void DataFile::setArrivalTime(string time) {
+void DataFile::setArrivalTime(int time) {
     this->arrivalTime = time;
+}
+
+void DataFile::setExeuctionTime(int time) {
+    this->executionTime = time;
 }
 
 void DataFile::addCPUBurst(int burst) {

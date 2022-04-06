@@ -34,7 +34,7 @@ class PCBObject {
         DataFile dataFile;
     public:
         // Constructor
-        PCBObject(int PID, ProcessPriority priority, ProcessState state, int executionTime, int accumulatedTime, DataFile dataFile);
+        PCBObject(DataFile dataFile);
         // Getters and Setters:
         int getPID();
         ProcessPriority getPriority();

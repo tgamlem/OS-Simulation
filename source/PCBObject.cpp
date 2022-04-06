@@ -1,16 +1,14 @@
 #include "PCBObject.h"
 #include <iostream>
 
-PCBObject::PCBObject(int PID, ProcessPriority priority, ProcessState state, int executionTime, int accumulatedTime, DataFile dataFile) {
-    this->PID = PID;
-    this->priority = priority;
-    this->state = state;
-    arrivalTime = 0;
+PCBObject::PCBObject(DataFile dataFile) {
+    PID = dataFile.getPID();
+    arrivalTime = dataFile.getArrivalTime();
     departureTime = 0;
     responseTime = 0;
     waitTime = 0;
-    this->executionTime = executionTime;
-    this->accumulatedTime = accumulatedTime;
+    executionTime = dataFile.getExecutionTime();
+    accumulatedTime = 0;
     this->dataFile = dataFile;
 }
 
