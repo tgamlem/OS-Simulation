@@ -29,6 +29,9 @@ class FCFS {
 
         int getCPUCount();
         void setCPUCount(int cpuCount);
+        int run(int curTime);
+        // write pcb data to csv file
+        void csv(PCBObject pcb);
 };
 
 #endif

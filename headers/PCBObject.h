@@ -50,6 +50,7 @@ class PCBObject {
         int getExecutionTime();
         int getAccumulatedTime();
         int getResponseTime();
+        int getWaitTime();
         DataFile getDataFile();
         void setDataFile(DataFile dataFile);
         void setPriority(ProcessPriority priority);

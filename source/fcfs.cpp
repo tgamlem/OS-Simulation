@@ -1,6 +1,7 @@
 #include <chrono>
 #include <queue>
 #include <string>
+#include <fstream>
 #include "fcfs.h"
 #include "PCBObject.h"
 
@@ -60,4 +61,10 @@ int FCFS::getCPUCount() {
 
 void FCFS::setCPUCount(int cpuCount) {
     cpus = cpuCount;
+}
+
+void FCFS::csv(PCBObject pcb) {
+    ofstream csvFile("data.csv");
+    csvFile << pcb.getPID() << "," << pcb.getResponseTime() << "," << pcb.getWaitTime() << "," << pcb.getAccumulatedTime() << "," << endl;
+    csvFile.close();
 }
