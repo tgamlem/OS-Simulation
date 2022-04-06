@@ -10,10 +10,10 @@ class MultilevelFeedbackQueue {
         int timer;
         FCFS highPriority;
         FCFS midPriority;
-        Roundrobin lowPriority;
+        RoundRobin lowPriority;
     public:
         // Constructor
-        MultilevelFeedbackQueue(FCFS high, FCFS mid, Roundrobin low);
+        MultilevelFeedbackQueue(FCFS high, FCFS mid, RoundRobin low);
         // add time to timer
         void addTime(int time);
         // get current time
@@ -27,7 +27,7 @@ class MultilevelFeedbackQueue {
         // getter for mid priority queue
         FCFS getMidPriority();
         // getter for low priority queue
-        Roundrobin getLowPriority();
+        RoundRobin getLowPriority();
 };
 
 #endif

@@ -95,6 +95,8 @@ bool PCBObject::operator==(const PCBObject& pcb) {
     } else {
         return false;
     }
+}
+
 void PCBObject::setExecutionTime(int time) {
     executionTime = time;
 }

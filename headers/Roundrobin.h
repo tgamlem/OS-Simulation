@@ -16,7 +16,7 @@ private:
 public :
     RoundRobin(PCBObject pcb, int timeSlice);
     RoundRobin(queue<PCBObject> ready, int timeSlice);
-    int run(int curTime);
+    vector<int> run(vector<int> curTime);
     int getTimeSlice();
     void setTimeSlice(int time);
 };

@@ -6,14 +6,18 @@
 
 FCFS::FCFS(PCBObject pcb) {
     ready.push(pcb);
+    this->cpus = 1;
 }
 
 FCFS::FCFS(queue<PCBObject> ready) {
     this->ready = ready;
+    this->cpus = 1;
 }
 
 void FCFS::addReady(PCBObject pcb, int curTime) {
-    pcb.setArrivalTime(curTime);
+    if (pcb.getArrivalTime() == 0) {
+        pcb.setArrivalTime(curTime);
+    }
     ready.push(pcb);
 }
 
@@ -26,13 +30,25 @@ PCBObject FCFS::checkTop() {
     return ready.front();
 }
 
-int FCFS::run(int curTime) {
-    PCBObject pcb = ready.front();
-    ready.pop();
-    pcb.setResponseTime(curTime);
-    pcb.setWaitTime(curTime);
-    pcb.setAccumulatedTime(pcb.getExecutionTime());
-    curTime += pcb.getExecutionTime();
+vector<int> FCFS::run(vector<int> curTime) {
+    //CPUS run in strict parallel!
+    for (int i = 0; i < cpus; i++) {
+        PCBObject pcb = ready.front();
+        ready.pop();
+        pcb.setResponseTime(curTime[i]);
+        pcb.setWaitTime(curTime[i]);
+        pcb.setAccumulatedTime(pcb.getExecutionTime());
+        curTime[i] += pcb.getExecutionTime();
+    
+    }
     // print pcb object
     return curTime;
+}
+
+int FCFS::getCPUCount() {
+    return cpus;
+}
+
+void FCFS::setCPUCount(int cpuCount) {
+    cpus = cpuCount;
 }

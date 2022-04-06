@@ -17,22 +17,24 @@ RoundRobin::RoundRobin(queue<PCBObject> ready, int timeSlice): FCFS(ready) {
     this->timeSlice = timeSlice;
 }
 
-int RoundRobin::run(int curTime) {
-    PCBObject pcb = checkTop();
-    removeReady(curTime);
-    if (pcb.getResponseTime() == 0) {
-        pcb.setResponseTime(curTime);
-    }
-    pcb.setWaitTime(curTime);
-    if (pcb.getExecutionTime() > timeSlice) {
-        int partialExecutionTime = pcb.getExecutionTime() - timeSlice;
-        pcb.setAccumulatedTime(pcb.getExecutionTime());
-        pcb.setExecutionTime(partialExecutionTime);
-        curTime += timeSlice;
-        addReady(pcb, curTime);
-    } else {
-        pcb.setAccumulatedTime(pcb.getExecutionTime());
-        curTime += pcb.getExecutionTime();
+vector<int> RoundRobin::run(vector<int> curTime) {
+    for (int i = 0; i < getCPUCount(); i++) {
+        PCBObject pcb = checkTop();
+        removeReady(curTime[i]);
+        if (pcb.getResponseTime() == 0) {
+            pcb.setResponseTime(curTime[i]);
+        }
+        pcb.setWaitTime(curTime[i]);
+        if (pcb.getExecutionTime() > timeSlice) {
+            int partialExecutionTime = pcb.getExecutionTime() - timeSlice;
+            pcb.setAccumulatedTime(pcb.getExecutionTime());
+            pcb.setExecutionTime(partialExecutionTime);
+            curTime[i] += timeSlice;
+            addReady(pcb, curTime[i]);
+        } else {
+            pcb.setAccumulatedTime(pcb.getExecutionTime());
+            curTime[i] += pcb.getExecutionTime();
+        }
     }
 
     return curTime;

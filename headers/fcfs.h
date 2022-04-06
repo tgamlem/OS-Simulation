@@ -2,11 +2,13 @@
 #define FCFS_H
 #include <string>
 #include <queue>
+#include <vector>
 #include "PCBObject.h"
 
 class FCFS {
     private:
         queue<PCBObject> ready;
+        int cpus;
     public:
         // constructor with one object
         FCFS(PCBObject pcb);
@@ -19,7 +21,10 @@ class FCFS {
         // remove an object from the ready queue
         void removeReady(int curTime);
         // run a process
-        int run(int curTime);
+        vector<int> run(vector<int> curTime);
+
+        int getCPUCount();
+        void setCPUCount(int cpuCount);
 };
 
 #endif

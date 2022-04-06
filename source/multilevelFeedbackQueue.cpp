@@ -3,7 +3,7 @@
 #include "Roundrobin.h"
 #include "PCBObject.h"
 
-MultilevelFeedbackQueue::MultilevelFeedbackQueue(FCFS high, FCFS mid, Roundrobin low) {
+MultilevelFeedbackQueue::MultilevelFeedbackQueue(FCFS high, FCFS mid, RoundRobin low) {
     highPriority = high;
     midPriority = mid;
     lowPriority = low;
@@ -22,16 +22,16 @@ int MultilevelFeedbackQueue::getTime() {
 void MultilevelFeedbackQueue::raisePriority(PCBObject process) {
     if (process == midPriority.checkTop()) {
         highPriority.addReady(process, timer);
-    }//  else if (/*process == lowPriority*/) {
-    //     midPriority.addReady(process, timer);
-    // }
+    } else if (process == lowPriority.checkTop()) {
+        midPriority.addReady(process, timer);
+    }
 }
 
 void MultilevelFeedbackQueue::lowerPriority(PCBObject process) {
     if (process == highPriority.checkTop()) {
         midPriority.addReady(process, timer);
     } else if (process == midPriority.checkTop()) {
-        // add to lowPriority
+        lowerPriority.addReady(process, timer);
     }
 }
 
@@ -43,6 +43,6 @@ FCFS MultilevelFeedbackQueue::getMidPriority() {
     return midPriority;
 }
 
-Roundrobin MultilevelFeedbackQueue::getLowPriority() {
+RoundRobin MultilevelFeedbackQueue::getLowPriority() {
     return lowPriority;
 }
