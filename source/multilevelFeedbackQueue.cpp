@@ -31,7 +31,7 @@ void MultilevelFeedbackQueue::lowerPriority(PCBObject process) {
     if (process == highPriority.checkTop()) {
         midPriority.addReady(process, timer);
     } else if (process == midPriority.checkTop()) {
-        lowerPriority.addReady(process, timer);
+        lowPriority.addReady(process, timer);
     }
 }
 
@@ -45,4 +45,37 @@ FCFS MultilevelFeedbackQueue::getMidPriority() {
 
 RoundRobin MultilevelFeedbackQueue::getLowPriority() {
     return lowPriority;
+}
+
+FCFS MultilevelFeedbackQueue::getHighestQueue() {
+    if (!highPriority.isEmpty()) {
+        return highPriority;
+    } else if (!midPriority.isEmpty()) {
+        return midPriority;
+    } else if (!lowPriority.isEmpty()) {
+        return lowPriority;
+    }
+}
+
+
+vector<int> MultilevelFeedbackQueue::run(vector<int> curTime) {
+    while (!highPriority.isEmpty() || !midPriority.isEmpty() || !lowPriority.isEmpty()) {
+        for (int i = 0; i < highPriority.getCPUCount(); i++) {
+            auto currentQueue = getHighestQueue();
+            auto pcb = currentQueue.checkTop();
+            currentQueue.removeReady(curTime[i]);
+            if (pcb.getExecutionTime() > timer) {
+                int partialExecutionTime = pcb.getExecutionTime() - timer;
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                pcb.setExecutionTime(partialExecutionTime);
+                curTime[i] += timer;
+                lowerPriority(pcb);
+            } else {
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                curTime[i] += pcb.getExecutionTime();
+            }
+        }
+    }
+
+    return curTime;
 }

@@ -13,7 +13,15 @@ RoundRobin::RoundRobin(PCBObject pcb, int timeSlice): FCFS(pcb) {
     this->timeSlice = timeSlice;
 }
 
+RoundRobin::RoundRobin() {
+    this->timeSlice = 5;
+}
+
 RoundRobin::RoundRobin(queue<PCBObject> ready, int timeSlice): FCFS(ready) {
+    this->timeSlice = timeSlice;
+}
+
+RoundRobin::RoundRobin(int timeSlice) : FCFS() {
     this->timeSlice = timeSlice;
 }
 
@@ -30,6 +38,7 @@ vector<int> RoundRobin::run(vector<int> curTime) {
             pcb.setAccumulatedTime(pcb.getExecutionTime());
             pcb.setExecutionTime(partialExecutionTime);
             curTime[i] += timeSlice;
+            cout << pcb.getPID() << endl;
             addReady(pcb, curTime[i]);
         } else {
             pcb.setAccumulatedTime(pcb.getExecutionTime());

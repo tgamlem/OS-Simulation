@@ -14,6 +14,8 @@ class RoundRobin: public FCFS {
 private:
     int timeSlice;
 public :
+    RoundRobin(int timeSlice);
+    RoundRobin();
     RoundRobin(PCBObject pcb, int timeSlice);
     RoundRobin(queue<PCBObject> ready, int timeSlice);
     vector<int> run(vector<int> curTime);

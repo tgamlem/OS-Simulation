@@ -1,7 +1,8 @@
 #include "PCBObject.h"
 #include <iostream>
 
-PCBObject::PCBObject(DataFile dataFile) {
+PCBObject::PCBObject(DataFile dataFile): dataFile(10) {
+    this->dataFile = dataFile;
     PID = dataFile.getPID();
     arrivalTime = dataFile.getArrivalTime();
     departureTime = 0;
@@ -9,7 +10,6 @@ PCBObject::PCBObject(DataFile dataFile) {
     waitTime = 0;
     executionTime = dataFile.getExecutionTime();
     accumulatedTime = 0;
-    this->dataFile = dataFile;
 }
 
 int PCBObject::getPID() {

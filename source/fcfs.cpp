@@ -4,6 +4,11 @@
 #include "fcfs.h"
 #include "PCBObject.h"
 
+FCFS::FCFS() {
+    this->cpus = 1;
+}
+
+
 FCFS::FCFS(PCBObject pcb) {
     ready.push(pcb);
     this->cpus = 1;
@@ -28,6 +33,10 @@ void FCFS::removeReady(int curTime) {
 
 PCBObject FCFS::checkTop() {
     return ready.front();
+}
+
+bool FCFS::isEmpty() {
+    return ready.empty();
 }
 
 vector<int> FCFS::run(vector<int> curTime) {

@@ -28,6 +28,9 @@ class MultilevelFeedbackQueue {
         FCFS getMidPriority();
         // getter for low priority queue
         RoundRobin getLowPriority();
+
+        vector<int> run(vector<int> currTime);
+        FCFS getHighestQueue();
 };
 
 #endif

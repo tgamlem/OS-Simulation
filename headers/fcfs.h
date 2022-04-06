@@ -10,12 +10,16 @@ class FCFS {
         queue<PCBObject> ready;
         int cpus;
     public:
+        // constructor with an empty ready queue.
+        FCFS();
         // constructor with one object
         FCFS(PCBObject pcb);
         // constructor with a queue of objects
         FCFS(queue<PCBObject> ready);
         // check top of ready queue
         PCBObject checkTop();
+        // check if ready queue is empty
+        bool isEmpty();
         // add an object to the ready queue
         void addReady(PCBObject pcb, int curTime);
         // remove an object from the ready queue
