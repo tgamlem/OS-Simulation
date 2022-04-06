@@ -12,6 +12,8 @@ class FCFS {
         FCFS(PCBObject pcb);
         // constructor with a queue of objects
         FCFS(queue<PCBObject> ready);
+        // check top of ready queue
+        PCBObject checkTop();
         // add an object to the ready queue
         void addReady(PCBObject pcb, int curTime);
         // remove an object from the ready queue
