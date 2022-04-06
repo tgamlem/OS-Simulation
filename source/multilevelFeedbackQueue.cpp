@@ -22,9 +22,9 @@ int MultilevelFeedbackQueue::getTime() {
 void MultilevelFeedbackQueue::raisePriority(PCBObject process) {
     if (process == midPriority.checkTop()) {
         highPriority.addReady(process, timer);
-    } else if (/*process == lowPriority*/) {
-        midPriority.addReady(process, timer);
-    }
+    }//  else if (/*process == lowPriority*/) {
+    //     midPriority.addReady(process, timer);
+    // }
 }
 
 void MultilevelFeedbackQueue::lowerPriority(PCBObject process) {

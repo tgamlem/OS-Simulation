@@ -90,3 +90,11 @@ void PCBObject::print() {
     std::cout << "\tDeparture Time: " << departureTime << endl;
     std::cout << "---------------------------------\n\n";
 }
+
+bool PCBObject::operator==(const PCBObject& pcb) {
+    if (this->PID == pcb.PID) {
+        return true;
+    } else {
+        return false;
+    }
+}

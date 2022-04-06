@@ -53,6 +53,7 @@ class PCBObject {
         void setPriority(ProcessPriority priority);
         void setState(ProcessState state);
         void print();
+        bool operator==(const PCBObject& pcb);
 };
 
 #endif
