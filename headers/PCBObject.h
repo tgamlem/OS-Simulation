@@ -40,6 +40,7 @@ class PCBObject {
         ProcessPriority getPriority();
         ProcessState getState();
         void setArrivalTime(int time);
+        void setExecutionTime(int time);
         void setDepartureTime(int time);
         void setResponseTime(int time);
         void setWaitTime(int time);
@@ -48,6 +49,7 @@ class PCBObject {
         int getDepartureTime();
         int getExecutionTime();
         int getAccumulatedTime();
+        int getResponseTime();
         DataFile getDataFile();
         void setDataFile(DataFile dataFile);
         void setPriority(ProcessPriority priority);
