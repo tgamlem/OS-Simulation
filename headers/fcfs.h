@@ -25,13 +25,12 @@ class FCFS {
         // remove an object from the ready queue
         void removeReady(int curTime);
         // run a process
-        vector<int> run(vector<int> curTime);
+        vector<int> run(string fileName, vector<int> curTime);
 
         int getCPUCount();
         void setCPUCount(int cpuCount);
-        int run(int curTime);
         // write pcb data to csv file
-        void csv(PCBObject pcb);
+        void csv(string fileName, PCBObject pcb);
 };
 
 #endif

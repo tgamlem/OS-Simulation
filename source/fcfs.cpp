@@ -40,7 +40,7 @@ bool FCFS::isEmpty() {
     return ready.empty();
 }
 
-vector<int> FCFS::run(vector<int> curTime) {
+vector<int> FCFS::run(string fileName, vector<int> curTime) {
     //CPUS run in strict parallel!
     for (int i = 0; i < cpus; i++) {
         PCBObject pcb = ready.front();
@@ -49,9 +49,8 @@ vector<int> FCFS::run(vector<int> curTime) {
         pcb.setWaitTime(curTime[i]);
         pcb.setAccumulatedTime(pcb.getExecutionTime());
         curTime[i] += pcb.getExecutionTime();
-    
+        csv(fileName, pcb);
     }
-    // print pcb object
     return curTime;
 }
 
@@ -63,8 +62,8 @@ void FCFS::setCPUCount(int cpuCount) {
     cpus = cpuCount;
 }
 
-void FCFS::csv(PCBObject pcb) {
-    ofstream csvFile("data.csv");
+void FCFS::csv(string fileName, PCBObject pcb) {
+    ofstream csvFile(fileName, fstream::app);
     csvFile << pcb.getPID() << "," << pcb.getResponseTime() << "," << pcb.getWaitTime() << "," << pcb.getAccumulatedTime() << "," << endl;
     csvFile.close();
 }
