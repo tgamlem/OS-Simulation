@@ -20,6 +20,8 @@ class FCFS {
         void removeReady(int curTime);
         // run a process
         int run(int curTime);
+        // write pcb data to csv file
+        void csv(PCBObject pcb);
 };
 
 #endif

@@ -60,6 +60,10 @@ int PCBObject::getAccumulatedTime() {
     return accumulatedTime;
 }
 
+int PCBObject::getWaitTime() {
+    return waitTime;
+}
+
 DataFile PCBObject::getDataFile() {
     return dataFile;
 }

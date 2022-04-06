@@ -1,6 +1,7 @@
 #include <chrono>
 #include <queue>
 #include <string>
+#include <fstream>
 #include "fcfs.h"
 #include "PCBObject.h"
 
@@ -35,4 +36,10 @@ int FCFS::run(int curTime) {
     curTime += pcb.getExecutionTime();
     // print pcb object
     return curTime;
+}
+
+void FCFS::csv(PCBObject pcb) {
+    ofstream csvFile("data.csv");
+    csvFile << pcb.getPID() << "," << pcb.getResponseTime() << "," << pcb.getWaitTime() << "," << pcb.getAccumulatedTime() << "," << endl;
+    csvFile.close();
 }
