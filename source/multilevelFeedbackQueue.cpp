@@ -58,7 +58,7 @@ FCFS MultilevelFeedbackQueue::getHighestQueue() {
 }
 
 
-vector<int> MultilevelFeedbackQueue::run(vector<int> curTime) {
+vector<int> MultilevelFeedbackQueue::run(string fileName, vector<int> curTime) {
     while (!highPriority.isEmpty() || !midPriority.isEmpty() || !lowPriority.isEmpty()) {
         for (int i = 0; i < highPriority.getCPUCount(); i++) {
             auto currentQueue = getHighestQueue();
@@ -74,6 +74,7 @@ vector<int> MultilevelFeedbackQueue::run(vector<int> curTime) {
                 pcb.setAccumulatedTime(pcb.getExecutionTime());
                 curTime[i] += pcb.getExecutionTime();
             }
+            highPriority.csv(fileName, pcb);
         }
     }
 

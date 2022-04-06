@@ -29,7 +29,7 @@ class MultilevelFeedbackQueue {
         // getter for low priority queue
         RoundRobin getLowPriority();
 
-        vector<int> run(vector<int> currTime);
+        vector<int> run(string fileName, vector<int> currTime);
         FCFS getHighestQueue();
 };
 

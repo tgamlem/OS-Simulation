@@ -25,7 +25,7 @@ RoundRobin::RoundRobin(int timeSlice) : FCFS() {
     this->timeSlice = timeSlice;
 }
 
-vector<int> RoundRobin::run(vector<int> curTime) {
+vector<int> RoundRobin::run(string fileName, vector<int> curTime) {
     for (int i = 0; i < getCPUCount(); i++) {
         PCBObject pcb = checkTop();
         removeReady(curTime[i]);
@@ -44,6 +44,7 @@ vector<int> RoundRobin::run(vector<int> curTime) {
             pcb.setAccumulatedTime(pcb.getExecutionTime());
             curTime[i] += pcb.getExecutionTime();
         }
+        csv(fileName, pcb);
     }
 
     return curTime;

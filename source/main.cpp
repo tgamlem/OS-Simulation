@@ -26,7 +26,7 @@ int main() {
 
     while (fcfs.isEmpty() == false) {
         cout << processList.size() << endl;
-        cpus = fcfs.run(cpus);
+        cpus = fcfs.run("fcfs.csv", cpus);
     }
     for (int i = 0; i < CPUS; i++) {
         cout << "CPU " << i << " is " << cpus[i] << endl;
@@ -40,7 +40,7 @@ int main() {
     //set cpu cont here!!
     while (roundRobin.isEmpty() == false) {
         cout << processListRoundRobin.size() << endl;
-        cpus = roundRobin.run(cpus);
+        cpus = roundRobin.run("roundRobin.csv", cpus);
     }
     for (int i = 0; i < CPUS; i++) {
         cout << "CPU " << i << " is " << cpus[i] << endl;
@@ -57,7 +57,7 @@ int main() {
     roundRobin.setCPUCount(CPUS);
 
     MultilevelFeedbackQueue multiLevelFeedback = MultilevelFeedbackQueue(fcfsHigh, fcfsLow, roundRobinLow);
-    multiLevelFeedback.run(cpus);
+    multiLevelFeedback.run("multiLevelFeedback.csv", cpus);
     for (int i = 0; i < CPUS; i++) {
         cout << "CPU " << i << " is " << cpus[i] << endl;
     }
