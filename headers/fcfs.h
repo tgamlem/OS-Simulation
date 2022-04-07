@@ -4,11 +4,13 @@
 #include <queue>
 #include <vector>
 #include "PCBObject.h"
+#include <mutex>
 
 class FCFS {
     private:
         queue<PCBObject> ready;
         int cpus;
+        mutex m;
     public:
         // constructor with an empty ready queue.
         FCFS();
@@ -25,7 +27,7 @@ class FCFS {
         // remove an object from the ready queue
         void removeReady(int curTime);
         // run a process
-        vector<int> run(string fileName, vector<int> curTime);
+        int run(string fileName, int curTime);
 
         int getCPUCount();
         void setCPUCount(int cpuCount);

@@ -4,6 +4,7 @@
 #include <fstream>
 #include "fcfs.h"
 #include "PCBObject.h"
+#include <mutex>
 
 FCFS::FCFS() {
     this->cpus = 1;
@@ -40,18 +41,18 @@ bool FCFS::isEmpty() {
     return ready.empty();
 }
 
-vector<int> FCFS::run(string fileName, vector<int> curTime) {
+int FCFS::run(string fileName, int curTime) {
     //CPUS run in strict parallel!
-    for (int i = 0; i < cpus; i++) {
+        m.lock();
         PCBObject pcb = ready.front();
         ready.pop();
-        pcb.setResponseTime(curTime[i]);
-        pcb.setWaitTime(curTime[i]);
+        pcb.setResponseTime(curTime);
+        pcb.setWaitTime(curTime);
         pcb.setAccumulatedTime(pcb.getExecutionTime());
-        curTime[i] += pcb.getExecutionTime();
+        curTime += pcb.getExecutionTime();
         csv(fileName, pcb);
-    }
-    return curTime;
+        m.unlock();
+        return curTime;
 }
 
 int FCFS::getCPUCount() {

@@ -1,13 +1,16 @@
 #include <iostream>
 #include "multilevelFeedbackQueue.h"
+#include <thread>
+#include <mutex>
 
 #define CPUS 2
 #define PROCESS_NUM 50
 #define TIME_SLICE 4
 
+int currTime = 0;
+
 int main() {
     queue<PCBObject> processList;
-    int currTime = 0;
     for (int i = 0; i < PROCESS_NUM; i++) {
         auto dataFile = DataFile(currTime);
         processList.push(PCBObject(dataFile));
@@ -19,9 +22,8 @@ int main() {
     
     auto fcfs = FCFS(processList);
     fcfs.setCPUCount(CPUS);
-    vector<int> cpus;
     for (int i = 0; i < CPUS; i++) {
-        cpus.push_back(currTime);
+        thread(fcfs.run("fcfs.csv",currTime), std::ref(currTime));
     }
 
     while (fcfs.isEmpty() == false) {
