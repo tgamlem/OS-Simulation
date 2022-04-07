@@ -54,6 +54,8 @@ FCFS MultilevelFeedbackQueue::getHighestQueue() {
         return midPriority;
     } else if (!lowPriority.isEmpty()) {
         return lowPriority;
+    } else {
+        return highPriority;
     }
 }
 

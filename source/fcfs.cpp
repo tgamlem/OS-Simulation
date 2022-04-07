@@ -41,11 +41,10 @@ bool FCFS::isEmpty() {
     return ready.empty();
 }
 
-void FCFS::run(string fileName, int& curTime) {
+void FCFS::run(string fileName, int& curTime, mutex& m) {
     //CPUS run in strict parallel!
-    m.lock();
     while(true) {
-        m.lock();
+        m.try_lock();
         if (isEmpty()) {
             m.unlock();
             break;

@@ -27,17 +27,23 @@ int main() {
     // auto runFCFS = [&fcfs]() {
     //     fcfs.run("fcfs.csv", currTime);
     // };
+    int b = 0;
+    int c = 0;
     vector<thread> threads;
     for (int i = 0; i < CPUS; i++) {
-        currTime.push_back(0);
-        
-        threads.push_back(thread(&FCFS::run, &fcfs, "fcfs.csv", currTime[i]));
+        if (i == 0) {
+            threads.push_back(thread(&FCFS::run, &fcfs, "fcfs.csv", std::ref(c), std::ref(m)));
+        } else {
+            threads.push_back(thread(&FCFS::run, &fcfs, "fcfs.csv", std::ref(b), std::ref(m)));
+
+        }
     }
     for (int i = 0; i < CPUS; i++) {
         threads[i].join();
     }
 
-
+    currTime.push_back(b);
+    currTime.push_back(c);
     std::sort(currTime.begin(), currTime.end());
 
     std::cout << "Total Time: " << currTime[CPUS - 1] << endl;

@@ -10,7 +10,6 @@ class FCFS {
     private:
         queue<PCBObject> ready;
         int cpus;
-        mutex m;
     public:
         // constructor with an empty ready queue.
         FCFS();
@@ -27,7 +26,7 @@ class FCFS {
         // remove an object from the ready queue
         void removeReady(int curTime);
         // run a process
-        void run(string fileName, int& curTime);
+        void run(string fileName, int& curTime, mutex& m);
 
         int getCPUCount();
         void setCPUCount(int cpuCount);
