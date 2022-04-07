@@ -41,18 +41,25 @@ bool FCFS::isEmpty() {
     return ready.empty();
 }
 
-int FCFS::run(string fileName, int curTime) {
+void FCFS::run(string fileName, int& curTime) {
     //CPUS run in strict parallel!
+    m.lock();
+    while(true) {
         m.lock();
+        if (isEmpty()) {
+            m.unlock();
+            break;
+        }
         PCBObject pcb = ready.front();
         ready.pop();
+        m.unlock();
         pcb.setResponseTime(curTime);
         pcb.setWaitTime(curTime);
         pcb.setAccumulatedTime(pcb.getExecutionTime());
         curTime += pcb.getExecutionTime();
         csv(fileName, pcb);
-        m.unlock();
-        return curTime;
+    }
+    return;
 }
 
 int FCFS::getCPUCount() {

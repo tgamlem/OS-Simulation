@@ -7,12 +7,13 @@
 #define PROCESS_NUM 50
 #define TIME_SLICE 4
 
-int currTime = 0;
+vector<int> currTime;
+mutex m;
 
 int main() {
     queue<PCBObject> processList;
     for (int i = 0; i < PROCESS_NUM; i++) {
-        auto dataFile = DataFile(currTime);
+        auto dataFile = DataFile(0);
         processList.push(PCBObject(dataFile));
     }
     queue<PCBObject> processListRoundRobin = queue<PCBObject>(processList);
@@ -22,46 +23,57 @@ int main() {
     
     auto fcfs = FCFS(processList);
     fcfs.setCPUCount(CPUS);
+
+    // auto runFCFS = [&fcfs]() {
+    //     fcfs.run("fcfs.csv", currTime);
+    // };
+    vector<thread> threads;
     for (int i = 0; i < CPUS; i++) {
-        thread(fcfs.run("fcfs.csv",currTime), std::ref(currTime));
+        currTime.push_back(0);
+        
+        threads.push_back(thread(&FCFS::run, &fcfs, "fcfs.csv", currTime[i]));
+    }
+    for (int i = 0; i < CPUS; i++) {
+        threads[i].join();
     }
 
-    while (fcfs.isEmpty() == false) {
-        cout << processList.size() << endl;
-        cpus = fcfs.run("fcfs.csv", cpus);
-    }
-    for (int i = 0; i < CPUS; i++) {
-        cout << "CPU " << i << " is " << cpus[i] << endl;
-    }
-    cpus.clear();
-    for (int i = 0; i < CPUS; i++) {
-        cpus.push_back(currTime);
-    }
-    auto roundRobin = RoundRobin(processListRoundRobin, TIME_SLICE);
-    roundRobin.setCPUCount(CPUS);
-    //set cpu cont here!!
-    while (roundRobin.isEmpty() == false) {
-        cout << processListRoundRobin.size() << endl;
-        cpus = roundRobin.run("roundRobin.csv", cpus);
-    }
-    for (int i = 0; i < CPUS; i++) {
-        cout << "CPU " << i << " is " << cpus[i] << endl;
-    }
-    cpus.clear();
-    for (int i = 0; i < CPUS; i++) {
-        cpus.push_back(currTime);
-    }
-    auto fcfsHigh = FCFS(processListMultiLevelFeedback);
-    fcfsHigh.setCPUCount(CPUS);
-    auto fcfsLow = FCFS();
-    fcfsLow.setCPUCount(CPUS);
-    auto roundRobinLow = RoundRobin(TIME_SLICE);
-    roundRobin.setCPUCount(CPUS);
 
-    MultilevelFeedbackQueue multiLevelFeedback = MultilevelFeedbackQueue(fcfsHigh, fcfsLow, roundRobinLow);
-    multiLevelFeedback.run("multiLevelFeedback.csv", cpus);
+    std::sort(currTime.begin(), currTime.end());
+
+    std::cout << "Total Time: " << currTime[CPUS - 1] << endl;
+
     for (int i = 0; i < CPUS; i++) {
-        cout << "CPU " << i << " is " << cpus[i] << endl;
+        std::cout << "CPU " << i << " current time is " << currTime[i] << endl;
     }
+    // cpus.clear();
+    // for (int i = 0; i < CPUS; i++) {
+    //     cpus.push_back(currTime);
+    // }
+    // auto roundRobin = RoundRobin(processListRoundRobin, TIME_SLICE);
+    // roundRobin.setCPUCount(CPUS);
+    // //set cpu cont here!!
+    // while (roundRobin.isEmpty() == false) {
+    //     cout << processListRoundRobin.size() << endl;
+    //     cpus = roundRobin.run("roundRobin.csv", cpus);
+    // }
+    // for (int i = 0; i < CPUS; i++) {
+    //     cout << "CPU " << i << " is " << cpus[i] << endl;
+    // }
+    // cpus.clear();
+    // for (int i = 0; i < CPUS; i++) {
+    //     cpus.push_back(currTime);
+    // }
+    // auto fcfsHigh = FCFS(processListMultiLevelFeedback);
+    // fcfsHigh.setCPUCount(CPUS);
+    // auto fcfsLow = FCFS();
+    // fcfsLow.setCPUCount(CPUS);
+    // auto roundRobinLow = RoundRobin(TIME_SLICE);
+    // roundRobin.setCPUCount(CPUS);
+
+    // MultilevelFeedbackQueue multiLevelFeedback = MultilevelFeedbackQueue(fcfsHigh, fcfsLow, roundRobinLow);
+    // multiLevelFeedback.run("multiLevelFeedback.csv", cpus);
+    // for (int i = 0; i < CPUS; i++) {
+    //     cout << "CPU " << i << " is " << cpus[i] << endl;
+    // }
     return 0;
 }

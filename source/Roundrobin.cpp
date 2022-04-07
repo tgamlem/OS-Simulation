@@ -25,7 +25,7 @@ RoundRobin::RoundRobin(int timeSlice) : FCFS() {
     this->timeSlice = timeSlice;
 }
 
-int RoundRobin::run(string fileName, int curTime) {
+int RoundRobin::run(string fileName, int& curTime) {
     
         PCBObject pcb = checkTop();
         removeReady(curTime);

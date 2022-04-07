@@ -27,7 +27,7 @@ class FCFS {
         // remove an object from the ready queue
         void removeReady(int curTime);
         // run a process
-        int run(string fileName, int curTime);
+        void run(string fileName, int& curTime);
 
         int getCPUCount();
         void setCPUCount(int cpuCount);
