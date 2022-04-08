@@ -64,31 +64,32 @@ FCFS * MultilevelFeedbackQueue::getHighestQueue() {
 
 void MultilevelFeedbackQueue::run(string fileName, int& curTime, mutex& m) {
     while (!highPriority->isEmpty() || !midPriority->isEmpty() || !lowPriority->isEmpty()) {
-        m.try_lock();
-        auto currentQueue = getHighestQueue();
-        auto pcb = currentQueue->checkTop();
-        currentQueue->removeReady(curTime);
-        if (pcb.getResponseTime() == 0) {
-            pcb.setResponseTime(curTime);
-        }
-        pcb.setWaitTime(curTime);
-        m.unlock();
-        if (pcb.getExecutionTime() > timer) {
-            int partialExecutionTime = pcb.getExecutionTime() - timer;
-            pcb.setAccumulatedTime(pcb.getExecutionTime());
-            pcb.setExecutionTime(partialExecutionTime);
-            curTime += timer;
-            //Context overhead.
-            curTime += 3;
-            m.try_lock();
-            lowerPriority(pcb);
+        if(m.try_lock()) {
+            auto currentQueue = getHighestQueue();
+            auto pcb = currentQueue->checkTop();
+            currentQueue->removeReady(curTime);
+            if (pcb.getResponseTime() == 0) {
+                pcb.setResponseTime(curTime);
+            }
+            pcb.setWaitTime(curTime);
             m.unlock();
-        } else {
-            pcb.setAccumulatedTime(pcb.getExecutionTime());
-            curTime += pcb.getExecutionTime();
-            //Context overhead.
-            curTime += 1;
+            if (pcb.getExecutionTime() > timer) {
+                int partialExecutionTime = pcb.getExecutionTime() - timer;
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                pcb.setExecutionTime(partialExecutionTime);
+                curTime += timer;
+                //Context overhead.
+                curTime += 3;
+                m.try_lock();
+                lowerPriority(pcb);
+                m.unlock();
+            } else {
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                curTime += pcb.getExecutionTime();
+                //Context overhead.
+                curTime += 1;
+            }
+            currentQueue->csv(fileName, pcb);
         }
-        currentQueue->csv(fileName, pcb);
     }
 }

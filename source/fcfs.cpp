@@ -74,7 +74,7 @@ void FCFS::setCPUCount(int cpuCount) {
 
 void FCFS::csv(string fileName, PCBObject pcb) {
     ofstream csvFile(fileName, fstream::app);
-    csvFile << pcb.getPID() << "," << pcb.getResponseTime() << "," << pcb.getWaitTime() << "," << pcb.getAccumulatedTime() << "," << endl;
+    csvFile << pcb.getPID() << " " << pcb.getResponseTime() << " " << pcb.getWaitTime() << " " << pcb.getAccumulatedTime() << " " << endl;
     csvFile.close();
 }
 
