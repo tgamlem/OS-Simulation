@@ -4,7 +4,6 @@
 #include <sstream>
 
 DataFile::DataFile(int curTime) {
-    // srandom();
     int pid = rand() % 30000 + 300;
     this->PID = pid;
     this->arrivalTime = curTime;

@@ -25,29 +25,38 @@ RoundRobin::RoundRobin(int timeSlice) : FCFS() {
     this->timeSlice = timeSlice;
 }
 
-int RoundRobin::run(string fileName, int& curTime) {
-    
-        PCBObject pcb = checkTop();
-        removeReady(curTime);
-        if (pcb.getResponseTime() == 0) {
-            pcb.setResponseTime(curTime);
+void RoundRobin::run(string fileName, int& curTime, mutex& m) {
+    while (true) {
+        if (m.try_lock() && !isEmpty()) {
+            PCBObject pcb = checkTop();
+            removeReady(curTime);
+            m.unlock();
+            if (pcb.getResponseTime() == 0) {
+                pcb.setResponseTime(curTime);
+            }
+            pcb.setWaitTime(curTime);
+            if (pcb.getExecutionTime() > timeSlice) {
+                int partialExecutionTime = pcb.getExecutionTime() - timeSlice;
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                pcb.setExecutionTime(partialExecutionTime);
+                //Context overhead.
+                curTime += 2;
+                curTime += timeSlice;
+                m.try_lock();
+                addReady(pcb, curTime);
+                m.unlock();
+            } else {
+                //Context overhead.
+                curTime += 1;
+                pcb.setAccumulatedTime(pcb.getExecutionTime());
+                curTime += pcb.getExecutionTime();
+            }
+            csv(fileName, pcb);
+        } else if (isEmpty()) {
+            m.unlock();
+            break;
         }
-        pcb.setWaitTime(curTime);
-        if (pcb.getExecutionTime() > timeSlice) {
-            int partialExecutionTime = pcb.getExecutionTime() - timeSlice;
-            pcb.setAccumulatedTime(pcb.getExecutionTime());
-            pcb.setExecutionTime(partialExecutionTime);
-            curTime += timeSlice;
-            cout << pcb.getPID() << endl;
-            addReady(pcb, curTime);
-        } else {
-            pcb.setAccumulatedTime(pcb.getExecutionTime());
-            curTime += pcb.getExecutionTime();
-        }
-        csv(fileName, pcb);
-    
-
-    return curTime;
+    }
 }
 
 int RoundRobin::getTimeSlice() {

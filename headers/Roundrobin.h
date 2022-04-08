@@ -18,7 +18,7 @@ public :
     RoundRobin();
     RoundRobin(PCBObject pcb, int timeSlice);
     RoundRobin(queue<PCBObject> ready, int timeSlice);
-    int run(string fileName, int& curTime);
+    void run(string fileName, int& curTime, mutex& m);
     int getTimeSlice();
     void setTimeSlice(int time);
 };

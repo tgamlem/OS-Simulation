@@ -32,6 +32,7 @@ class FCFS {
         void setCPUCount(int cpuCount);
         // write pcb data to csv file
         void csv(string fileName, PCBObject pcb);
+        int size();
 };
 
 #endif

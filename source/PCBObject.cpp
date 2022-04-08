@@ -10,6 +10,7 @@ PCBObject::PCBObject(DataFile dataFile): dataFile(10) {
     waitTime = 0;
     executionTime = dataFile.getExecutionTime();
     accumulatedTime = 0;
+    priority = PPHigh;
 }
 
 int PCBObject::getPID() {
@@ -93,7 +94,7 @@ void PCBObject::print() {
     std::cout << "---------------------------------\n\n";
 }
 
-bool PCBObject::operator==(const PCBObject& pcb) {
+bool PCBObject::operator==(const PCBObject& pcb) const {
     if (this->PID == pcb.PID) {
         return true;
     } else {

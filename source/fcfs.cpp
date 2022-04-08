@@ -25,6 +25,7 @@ void FCFS::addReady(PCBObject pcb, int curTime) {
     if (pcb.getArrivalTime() == 0) {
         pcb.setArrivalTime(curTime);
     }
+//    cout << pcb.getPID() << endl;
     ready.push(pcb);
 }
 
@@ -49,6 +50,8 @@ void FCFS::run(string fileName, int& curTime, mutex& m) {
             m.unlock();
             break;
         }
+        //Context overhead.
+        curTime += 1;
         PCBObject pcb = ready.front();
         ready.pop();
         m.unlock();
@@ -73,4 +76,8 @@ void FCFS::csv(string fileName, PCBObject pcb) {
     ofstream csvFile(fileName, fstream::app);
     csvFile << pcb.getPID() << "," << pcb.getResponseTime() << "," << pcb.getWaitTime() << "," << pcb.getAccumulatedTime() << "," << endl;
     csvFile.close();
+}
+
+int FCFS::size() {
+    return int(ready.size());
 }

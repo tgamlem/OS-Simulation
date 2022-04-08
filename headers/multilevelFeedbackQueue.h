@@ -8,12 +8,12 @@
 class MultilevelFeedbackQueue {
     private:
         int timer;
-        FCFS highPriority;
-        FCFS midPriority;
-        RoundRobin lowPriority;
+        FCFS * highPriority;
+        FCFS * midPriority;
+        RoundRobin * lowPriority;
     public:
         // Constructor
-        MultilevelFeedbackQueue(FCFS high, FCFS mid, RoundRobin low);
+        MultilevelFeedbackQueue(FCFS * high, FCFS * mid, RoundRobin * low);
         // add time to timer
         void addTime(int time);
         // get current time
@@ -23,14 +23,14 @@ class MultilevelFeedbackQueue {
         // move process from high priority to lower priority
         void lowerPriority(PCBObject process);
         // getter for high priority queue
-        FCFS getHighPriority();
+        FCFS * getHighPriority();
         // getter for mid priority queue
-        FCFS getMidPriority();
+        FCFS * getMidPriority();
         // getter for low priority queue
-        RoundRobin getLowPriority();
+        RoundRobin * getLowPriority();
 
-        vector<int> run(string fileName, vector<int> currTime);
-        FCFS getHighestQueue();
+        void run(string fileName, int& currTime, mutex& m);
+        FCFS * getHighestQueue();
 };
 
 #endif

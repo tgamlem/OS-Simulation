@@ -3,7 +3,7 @@
 #include "Roundrobin.h"
 #include "PCBObject.h"
 
-MultilevelFeedbackQueue::MultilevelFeedbackQueue(FCFS high, FCFS mid, RoundRobin low) {
+MultilevelFeedbackQueue::MultilevelFeedbackQueue(FCFS * high, FCFS * mid, RoundRobin * low) {
     highPriority = high;
     midPriority = mid;
     lowPriority = low;
@@ -19,40 +19,42 @@ int MultilevelFeedbackQueue::getTime() {
     return timer;
 }
 
-void MultilevelFeedbackQueue::raisePriority(PCBObject process) {
-    if (process == midPriority.checkTop()) {
-        highPriority.addReady(process, timer);
-    } else if (process == lowPriority.checkTop()) {
-        midPriority.addReady(process, timer);
-    }
-}
+//void MultilevelFeedbackQueue::raisePriority(PCBObject process) {
+//    if (process == midPriority.checkTop()) {
+//        highPriority.addReady(process, timer);
+//    } else if (process == lowPriority.checkTop()) {
+//        midPriority.addReady(process, timer);
+//    }
+//}
 
 void MultilevelFeedbackQueue::lowerPriority(PCBObject process) {
-    if (process == highPriority.checkTop()) {
-        midPriority.addReady(process, timer);
-    } else if (process == midPriority.checkTop()) {
-        lowPriority.addReady(process, timer);
+    if (process.getPriority() == PPHigh) {
+        process.setPriority(PPMedium);
+        midPriority->addReady(process, timer);
+    } else if (process.getPriority() == PPMedium) {
+        process.setPriority(PPLow);
+        lowPriority->addReady(process, timer);
     }
 }
 
-FCFS MultilevelFeedbackQueue::getHighPriority() {
+FCFS * MultilevelFeedbackQueue::getHighPriority() {
     return highPriority;
 }
 
-FCFS MultilevelFeedbackQueue::getMidPriority() {
+FCFS * MultilevelFeedbackQueue::getMidPriority() {
     return midPriority;
 }
 
-RoundRobin MultilevelFeedbackQueue::getLowPriority() {
+RoundRobin * MultilevelFeedbackQueue::getLowPriority() {
     return lowPriority;
 }
 
-FCFS MultilevelFeedbackQueue::getHighestQueue() {
-    if (!highPriority.isEmpty()) {
+FCFS * MultilevelFeedbackQueue::getHighestQueue() {
+    if (!highPriority->isEmpty()) {
         return highPriority;
-    } else if (!midPriority.isEmpty()) {
+    } else if (!midPriority->isEmpty()) {
         return midPriority;
-    } else if (!lowPriority.isEmpty()) {
+    } else if (!lowPriority->isEmpty()) {
         return lowPriority;
     } else {
         return highPriority;
@@ -60,25 +62,33 @@ FCFS MultilevelFeedbackQueue::getHighestQueue() {
 }
 
 
-vector<int> MultilevelFeedbackQueue::run(string fileName, vector<int> curTime) {
-    while (!highPriority.isEmpty() || !midPriority.isEmpty() || !lowPriority.isEmpty()) {
-        for (int i = 0; i < highPriority.getCPUCount(); i++) {
-            auto currentQueue = getHighestQueue();
-            auto pcb = currentQueue.checkTop();
-            currentQueue.removeReady(curTime[i]);
-            if (pcb.getExecutionTime() > timer) {
-                int partialExecutionTime = pcb.getExecutionTime() - timer;
-                pcb.setAccumulatedTime(pcb.getExecutionTime());
-                pcb.setExecutionTime(partialExecutionTime);
-                curTime[i] += timer;
-                lowerPriority(pcb);
-            } else {
-                pcb.setAccumulatedTime(pcb.getExecutionTime());
-                curTime[i] += pcb.getExecutionTime();
-            }
-            highPriority.csv(fileName, pcb);
+void MultilevelFeedbackQueue::run(string fileName, int& curTime, mutex& m) {
+    while (!highPriority->isEmpty() || !midPriority->isEmpty() || !lowPriority->isEmpty()) {
+        m.try_lock();
+        auto currentQueue = getHighestQueue();
+        auto pcb = currentQueue->checkTop();
+        currentQueue->removeReady(curTime);
+        if (pcb.getResponseTime() == 0) {
+            pcb.setResponseTime(curTime);
         }
+        pcb.setWaitTime(curTime);
+        m.unlock();
+        if (pcb.getExecutionTime() > timer) {
+            int partialExecutionTime = pcb.getExecutionTime() - timer;
+            pcb.setAccumulatedTime(pcb.getExecutionTime());
+            pcb.setExecutionTime(partialExecutionTime);
+            curTime += timer;
+            //Context overhead.
+            curTime += 3;
+            m.try_lock();
+            lowerPriority(pcb);
+            m.unlock();
+        } else {
+            pcb.setAccumulatedTime(pcb.getExecutionTime());
+            curTime += pcb.getExecutionTime();
+            //Context overhead.
+            curTime += 1;
+        }
+        currentQueue->csv(fileName, pcb);
     }
-
-    return curTime;
 }
