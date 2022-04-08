@@ -40,6 +40,7 @@ class PCBObject {
         ProcessPriority getPriority();
         ProcessState getState();
         void setArrivalTime(int time);
+        void setExecutionTime(int time);
         void setDepartureTime(int time);
         void setResponseTime(int time);
         void setWaitTime(int time);
@@ -48,12 +49,14 @@ class PCBObject {
         int getDepartureTime();
         int getExecutionTime();
         int getAccumulatedTime();
+        int getResponseTime();
+        int getWaitTime();
         DataFile getDataFile();
         void setDataFile(DataFile dataFile);
         void setPriority(ProcessPriority priority);
         void setState(ProcessState state);
         void print();
-        bool operator==(const PCBObject& pcb);
+        bool operator==(const PCBObject& pcb) const;
 };
 
 #endif
